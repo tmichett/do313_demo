@@ -1,0 +1,38 @@
+### Get Systems Ready (useful if SSO isn't installed and also creates the RHTraining Base Realm)  *** NOTE: Deletes all SSO items and cleans up
+lab start install-kccli
+
+
+## Modify Path for the KCAdmin utility
+### export PATH=$PATH:/opt/rh-sso-7.6/bin (Typically what would be done)
+
+echo "export PATH=$PATH:/opt/rh-sso-7.6/bin" >> ~/.bashrc
+source ~/.bashrc
+
+
+## Login with RHSSO Credentials
+
+kcadm.sh config credentials --server https://sso.lab.example.com:8080/auth --realm master --user admin
+
+
+## List Realms
+
+kcadm.sh get realms --fields realm
+
+## List users from Realms 
+
+kcadm.sh get users -r rhtraining
+
+
+## Create Training Demo Realm 
+
+kcadm.sh create realms -s realm=Training_Demo -s enabled=true
+
+## Add user to Training Demo Realm and create a password
+
+kcadm.sh create users -r Training_Demo -s username=travis -s enabled=true
+
+kcadm.sh set-password -r Training_Demo --username travis --new-password redhat
+
+## Test Credentials 
+
+kcadm.sh config credentials --server https://sso.lab.example.com:8080/auth --realm Training_Demo --user travis

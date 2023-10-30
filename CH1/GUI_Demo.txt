@@ -1,0 +1,31 @@
+### Get Systems Ready (useful if SSO isn't installed and also creates the RHTraining Base Realm)
+lab start install-adminconsole
+
+
+## URL and Login Information
+
+https://sso.lab.example.com:8080
+
+admin/redhat
+
+
+## Create a Realm
+
+Realm Name: Training_Demo
+
+## Enable Logging
+
+Manage => Events (Config) => Save Events (on for both) and then click "Save"
+
+## Create a user 
+travis/redhat 
+
+Manage => Users => Add User (complete username) then create credentials and set password
+
+## Verify user (login as new user)
+
+https://sso.lab.example.com:8080/auth/realms/Training_Demo/account/
+
+
+## From Admin Console ... look at logs, sessions, and Events
+
