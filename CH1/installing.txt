@@ -1,0 +1,47 @@
+## Need to run lab start to get SSO setup files on the system
+
+lab start install-ways
+
+
+ssh rhsso@sso
+
+## Unzip to /opt and change permissions
+
+sudo unzip rh-sso-7.6.0-server-dist.zip -d /opt
+
+sudo chown -R rhsso:rhsso /opt/rh-sso-7.6
+
+
+## Create and copy EAP and PostgresSQL JDBC drivers
+
+mkdir -p /opt/rh-sso-7.6/modules/system/layers/keycloak/org/postgresql/main
+
+cp postgresql-42.5.0.jar /opt/rh-sso-7.6/modules/system/layers/keycloak/org/postgresql/main/
+
+
+## Copy the SSO Extensions CLI Script and replace variables
+### Specifically, DB UN/PW values, the Connection URL, and the JAR file
+
+cp sso-extensions.cli /opt/rh-sso-7.6/bin/
+
+sed -i 's/set DB_USERNAME=<db_username>/set DB_USERNAME=postgres/' /opt/rh-sso-7.6/bin/sso-extensions.cli
+sed -i 's/set DB_PASSWORD=<db_password>/set DB_PASSWORD=postgres/' /opt/rh-sso-7.6/bin/sso-extensions.cli
+sed -i 's/<postgres_ip>/sso.lab.example.com/g' /opt/rh-sso-7.6/bin/sso-extensions.cli
+sed -i 's@<postgresql-jar-path>@/opt/rh-sso-7.6/modules/system/layers/keycloak/org/postgresql/main/postgresql-42.5.0.jar@g' /opt/rh-sso-7.6/bin/sso-extensions.cli
+
+
+
+## Launch the SSO Extensions with JBoss CLI 
+
+/opt/rh-sso-7.6/bin/jboss-cli.sh --file=/opt/rh-sso-7.6/bin/sso-extensions.cli
+
+## Create initial admin user 
+
+/opt/rh-sso-7.6/bin/add-user-keycloak.sh -u admin -p redhat
+
+
+## Create/Modify/Copy Service Configuration file for Start on Boot
+### Located in /opt/rh-sso-7.6/bin/init.d/jboss-eap.conf (originally where it lives and can be modified)
+#### Want to use what is in the repository
+
+
