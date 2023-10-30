@@ -43,5 +43,31 @@ sed -i 's@<postgresql-jar-path>@/opt/rh-sso-7.6/modules/system/layers/keycloak/o
 ## Create/Modify/Copy Service Configuration file for Start on Boot
 ### Located in /opt/rh-sso-7.6/bin/init.d/jboss-eap.conf (originally where it lives and can be modified)
 #### Want to use what is in the repository
+##### Change modes of the files and copy scripts
+##### Enable services 
+##### Start Services 
+
+sudo scp student@workstation:do313_demo/CH1/jboss-eap.conf /etc/default/
+
+sudo cp /opt/rh-sso-7.6/bin/init.d/jboss-eap-rhel.sh /etc/init.d
+sudo chmod +x /etc/init.d/jboss-eap-rhel.sh
+sudo restorecon /etc/init.d/jboss-eap-rhel.sh
+
+sudo chkconfig --add jboss-eap-rhel.sh
+sudo systemctl daemon-reload
+
+sudo service jboss-eap-rhel start
+sudo chkconfig jboss-eap-rhel.sh on
 
 
+## Verify Status of JBOSS Services 
+
+systemctl status jboss-eap-rhel
+tail /opt/rh-sso-7.6/standalone/log/server.log
+grep sso.lab.example.com /opt/rh-sso-7.6/standalone/log/server.log
+
+## Verify Admin Console in GUI
+
+https://sso.lab.example.com:8080
+
+### NOTE: Typically you would need to enable firewall ports, but the ETH1 adapter is configured in the "Trusted Zone"
