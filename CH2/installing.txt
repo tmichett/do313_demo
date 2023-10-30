@@ -47,7 +47,7 @@ sed -i 's@<postgresql-jar-path>@/opt/rh-sso-7.6/modules/system/layers/keycloak/o
 ##### Enable services 
 ##### Start Services 
 
-sudo scp student@workstation:do313_demo/CH1/jboss-eap.conf /etc/default/
+sudo scp student@workstation:do313_demo/CH2/jboss-eap.conf /etc/default/
 
 sudo cp /opt/rh-sso-7.6/bin/init.d/jboss-eap-rhel.sh /etc/init.d
 sudo chmod +x /etc/init.d/jboss-eap-rhel.sh
