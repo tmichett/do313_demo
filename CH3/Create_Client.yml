@@ -1,0 +1,17 @@
+---
+- name: Create SSO Client
+  hosts: localhost
+  tasks:
+    - name: Create Client
+      community.general.keycloak_client:
+        auth_client_id: admin-cli
+        auth_keycloak_url: https://sso.lab.example.com/auth
+        auth_realm: rhtraining
+        auth_username: admin
+        auth_password: redhat
+        state: present
+        realm: rhtraining
+        client_id: finance-webapp
+        protocol: openid-connect
+        direct_access_grants_enabled: false
+        
