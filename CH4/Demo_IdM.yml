@@ -1,0 +1,15 @@
+---
+- name: Create SSO Realm for Federated IdM
+  hosts: sso
+  tasks:
+    - name: Create or update Keycloak realm (minimal example)
+      community.general.keycloak_realm:
+        auth_client_id: admin-cli
+        auth_keycloak_url: https://sso.lab.example.com:8080/auth
+        auth_realm: master
+        auth_username: admin
+        auth_password: redhat
+        id: IdM_Test
+        realm: IdM_Test
+        state: present
+

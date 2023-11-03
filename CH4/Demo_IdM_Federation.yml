@@ -1,0 +1,53 @@
+---
+- name: Create SSO Realm for Federated IdM
+  hosts: sso
+  tasks:
+    - name: Create or update Keycloak realm (minimal example)
+      community.general.keycloak_realm:
+        auth_client_id: admin-cli
+        auth_keycloak_url: https://sso.lab.example.com:8080/auth
+        auth_realm: master
+        auth_username: admin
+        auth_password: redhat
+        id: IdM_Test
+        realm: IdM_Test
+        state: present
+
+    - name: Create LDAP user federation
+      #redhat.sso.sso_user_federation:
+      community.general.keycloak_user_federation:
+              #  auth_sso_url: https://sso.example.com/auth
+        auth_keycloak_url: https://sso.lab.example.com:8080/auth
+        auth_realm: master
+        auth_username: admin
+        auth_password: redhat
+        realm: IdM_Test
+        name: IdM_Federation
+        state: present
+        provider_id: ldap
+        provider_type: org.keycloak.storage.UserStorageProvider
+        config:
+          priority: 0
+          enabled: true
+          cachePolicy: DEFAULT
+          batchSizeForSync: 1000
+          editMode: READ_ONLY
+          importEnabled: true
+          syncRegistrations: false
+          vendor: other
+          usernameLDAPAttribute: uid
+          rdnLDAPAttribute: uid
+          uuidLDAPAttribute: ipaUniqueID
+          userObjectClasses: inetOrgPerson, organizationalPerson
+          connectionUrl: ldap://idm.ocp4.example.com
+          usersDn: cn=users,cn=accounts,dc=ocp4,dc=example,dc=com
+          authType: simple
+          bindDn: uid=admin,cn=users,cn=accounts,dc=ocp4,dc=example,dc=com
+          bindCredential: r3dh4t12342022
+          searchScope: 1
+          validatePasswordPolicy: false
+          trustEmail: false
+          useTruststoreSpi: ldapsOnly
+          connectionPooling: true
+          pagination: true
+          allowKerberosAuthentication: false
